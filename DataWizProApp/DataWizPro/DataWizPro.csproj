@@ -65,9 +65,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataServices\ProductService.cs" />
+    <Compile Include="HelperClasses\ConsolePrinter.cs" />
     <Compile Include="HelperClasses\DataAccess.cs" />
     <Compile Include="HelperClasses\DataTransfomer.cs" />
     <Compile Include="HelperClasses\ErrorHandler.cs" />
+    <Compile Include="Models\DbModels.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

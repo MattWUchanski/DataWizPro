@@ -68,9 +68,9 @@ namespace DataAccessNamespace
         }
 
         // Bez transakcji
-        public object CallSpForScalar(string storedProcedureName, Dictionary<string, object> queryParameters)
+        public object CallSpForScalar(string storedProcedureName, Dictionary<string, object> sqlParameters)
         {
-            var parameters = _parameterManager.GetParameters(storedProcedureName, queryParameters);
+            var parameters = _parameterManager.GetParameters(storedProcedureName, sqlParameters);
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -131,6 +131,27 @@ namespace DataAccessNamespace
             }
         }
 
+        // Bez transakcji
+        public void ExecQuery(string query, Dictionary<string, object> queryParameters)
+        {
+            var parameters = _parameterManager.GetParameters(query, queryParameters);
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+
+                    foreach (var parameter in parameters)
+                    {
+                        cmd.Parameters.Add(parameter);
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         // Z transakcją
         public DataTable CallSpForDt(string storedProcedureName, Dictionary<string, object> sqlParameters, SqlConnection conn, SqlTransaction transaction)
         {
@@ -156,9 +177,28 @@ namespace DataAccessNamespace
         }
 
         // Z transakcją
+        public object CallSpForScalar(string storedProcedureName, Dictionary<string, object> sqlParameters, SqlConnection conn, SqlTransaction transaction)
+        {
+            var parameters = _parameterManager.GetParameters(storedProcedureName, sqlParameters);
+
+            using (SqlCommand cmd = new SqlCommand(storedProcedureName, conn))
+            {
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                foreach (var parameter in parameters)
+                {
+                    cmd.Parameters.Add(parameter);
+                }
+
+                return cmd.ExecuteScalar();
+            }
+        }
+
+        // Z transakcją
         public void ExecSp(string storedProcedureName, Dictionary<string, object> sqlParameters, SqlConnection conn, SqlTransaction transaction)
         {
-            List<SqlParameter> parameters = _parameterManager.GetParameters(storedProcedureName, sqlParameters);
+            var parameters = _parameterManager.GetParameters(storedProcedureName, sqlParameters);
 
             using (SqlCommand cmd = new SqlCommand(storedProcedureName, conn, transaction))
             {
