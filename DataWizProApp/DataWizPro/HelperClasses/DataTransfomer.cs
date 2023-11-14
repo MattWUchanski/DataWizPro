@@ -49,6 +49,41 @@ public static class DataTransformer
         return dictionary;
     }
 
+    public static List<Dictionary<string, object>> ConvertToDictionaryList(DataTable dataTable)
+    {
+        List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+
+        foreach (DataRow row in dataTable.Rows)
+        {
+            var rowDictionary = new Dictionary<string, object>();
+            foreach (DataColumn column in dataTable.Columns)
+            {
+                rowDictionary[column.ColumnName] = row[column] != DBNull.Value ? row[column] : null;
+            }
+            list.Add(rowDictionary);
+        }
+
+        return list;
+    }
+
+    public static Dictionary<string, object> ConvertSingleRowToDictionary(DataTable dataTable)
+    {
+        if (dataTable == null || dataTable.Rows.Count == 0)
+        {
+            throw new InvalidOperationException("DataTable is empty or null.");
+        }
+
+        var dictionary = new Dictionary<string, object>();
+        DataRow row = dataTable.Rows[0];
+
+        foreach (DataColumn column in dataTable.Columns)
+        {
+            dictionary[column.ColumnName] = row[column] != DBNull.Value ? row[column] : null;
+        }
+
+        return dictionary;
+    }
+
     public static int ToInt(object value, int defaultValue = 0)
     {
         if (value == null || value is DBNull)
