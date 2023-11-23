@@ -71,6 +71,7 @@
     <Compile Include="HelperClasses\DataTransfomer.cs" />
     <Compile Include="HelperClasses\ErrorHandler.cs" />
     <Compile Include="Models\DbModels.cs" />
+    <Compile Include="Models\EnumModels.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

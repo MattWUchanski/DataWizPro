@@ -23,6 +23,8 @@ namespace DataWizPro.ProductServices
         public static readonly string GetProductsAmountWithQuery = "SELECT COUNT(*) as LiczbaProduktow FROM [net_app].[Products] WHERE available = @available";
         public static readonly string UpdateNameOfRecord = "UPDATE [net_app].[Products] SET name = @name WHERE id = @id";
         // ... Add more query definitions as needed
+
+        public static readonly string GetUsersWithQuery = "SELECT [Name], [Role], [Age], [Status] FROM [net_app].[UsersExtended] WHERE Name = @name";
     }
 
 
@@ -91,6 +93,25 @@ namespace DataWizPro.ProductServices
 
             _parameterManager.AddParameters(QueryDefinitions.UpdateNameOfRecord, updateNameOfRecordWithQuery);
 
+            var getUsersWithQueryParams = new List<ParameterDefinition>
+            {
+                new ParameterDefinition("@name", SqlDbType.VarChar),
+            };
+
+            _parameterManager.AddParameters(QueryDefinitions.GetUsersWithQuery, getUsersWithQueryParams);
+
+        }
+
+        public UserExtended GetUsersWithQuery(string name)
+        {
+            string query = QueryDefinitions.GetUsersWithQuery;
+            var parameters = new Dictionary<string, object>
+            {
+                { "@name", name }
+            };
+            DataTable dataTable = _dataAccess.CallQueryForDt(query, parameters);
+            DataRow row = dataTable.Rows[0];
+            return DataTransformer.ConvertToClass<UserExtended>(row);
         }
 
         public void UpdateNameOfRecordWithQuery(string name, int id)

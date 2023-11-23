@@ -25,19 +25,19 @@ namespace DataWizPro
             ProductService productService = new ProductService();
 
             // Create a new DataTable instance
-            DataTable productsTable = new DataTable();
+            //DataTable productsTable = new DataTable();
 
-            // Define columns in the DataTable to match the SQL table type structure
-            productsTable.Columns.Add("name", typeof(string));
-            productsTable.Columns.Add("description", typeof(string));
-            productsTable.Columns.Add("price", typeof(decimal));
-            productsTable.Columns.Add("available", typeof(bool));
+            //// Define columns in the DataTable to match the SQL table type structure
+            //productsTable.Columns.Add("name", typeof(string));
+            //productsTable.Columns.Add("description", typeof(string));
+            //productsTable.Columns.Add("price", typeof(decimal));
+            //productsTable.Columns.Add("available", typeof(bool));
 
-            // Add rows to the DataTable
-            productsTable.Rows.Add("Product 345v" + version, "Description 2137v" + version, 21.37m, true);
-            productsTable.Rows.Add("Product 567v" + version, "Description 2137v" + version, 37.21m, false);
+            //// Add rows to the DataTable
+            //productsTable.Rows.Add("Product 345v" + version, "Description 2137v" + version, 21.37m, true);
+            //productsTable.Rows.Add("Product 567v" + version, "Description 2137v" + version, 37.21m, false);
 
-            TestUpdateNameOfRecordWithQuery(productService, productName, id);
+            //TestUpdateNameOfRecordWithQuery(productService, productName, id);
 
             //TestInsertNewProducts(productService, productsTable);
 
@@ -48,7 +48,41 @@ namespace DataWizPro
 
             //TestGetProductsAmountWithQuery(productService, isAvailable);
 
+            var user = productService.GetUsersWithQuery("Alice");
+            //Console.WriteLine("Users:");
+            //Console.WriteLine(user.Name);
+            //Console.WriteLine(user.Role);
+            //Console.WriteLine(user.Age);
+            //Console.WriteLine(user.Status);
 
+            switch (user.Role)
+            {
+                case UserRole.Admin:
+                    Console.WriteLine("Admin");
+                    break;
+                case UserRole.User:
+                    Console.WriteLine("User");
+                    break;
+                case UserRole.Manager:
+                    Console.WriteLine("Manager");
+                    break;
+                case UserRole.Guest:
+                    Console.WriteLine("Guest");
+                    break;
+                default:
+                    Console.WriteLine("Unknown role");
+                    break;
+            }
+
+            //string controlCategory = "Kontrola";
+
+            //if (controlCategory == "Kontrola")
+            //{
+            //    Console.WriteLine("Test passed");
+            //}
+
+
+            
 
             Console.ReadLine();
         }

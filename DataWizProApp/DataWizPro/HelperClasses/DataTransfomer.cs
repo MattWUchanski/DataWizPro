@@ -5,6 +5,66 @@ using System.Reflection;
 
 public static class DataTransformer
 {
+    public static T ConvertToClass<T>(DataRow row) where T : new()
+    {
+        T obj = new T();
+
+        foreach (DataColumn column in row.Table.Columns)
+        {
+            PropertyInfo prop = typeof(T).GetProperty(column.ColumnName);
+            if (prop != null && row[column] != DBNull.Value)
+            {
+                object value = row[column];
+                if (prop.PropertyType.IsEnum)
+                {
+                    // If the property is an enum, convert the value to an enum
+                    value = Enum.ToObject(prop.PropertyType, value);
+                }
+                else
+                {
+                    // Otherwise, use standard conversion
+                    value = Convert.ChangeType(value, prop.PropertyType);
+                }
+                prop.SetValue(obj, value, null);
+            }
+        }
+
+        return obj;
+    }
+
+    //public static List<T> ConvertToList<T>(DataTable dataTable) where T : new()
+    //{
+    //    List<T> list = new List<T>();
+
+    //    foreach (DataRow row in dataTable.Rows)
+    //    {
+    //        T obj = new T();
+    //        foreach (DataColumn column in dataTable.Columns)
+    //        {
+    //            PropertyInfo prop = typeof(T).GetProperty(column.ColumnName);
+    //            if (prop != null && row[column] != DBNull.Value)
+    //            {
+    //                object value = row[column];
+    //                if (prop.PropertyType.IsEnum)
+    //                {
+    //                    // If the property is an enum, convert the value to an enum
+    //                    value = Enum.ToObject(prop.PropertyType, value);
+    //                }
+    //                else
+    //                {
+    //                    // Otherwise, use standard conversion
+    //                    value = Convert.ChangeType(value, prop.PropertyType);
+    //                }
+    //                prop.SetValue(obj, value, null);
+    //            }
+    //        }
+    //        list.Add(obj);
+    //    }
+
+    //    return list;
+    //}
+
+
     public static List<T> ConvertToList<T>(DataTable dataTable) where T : new()
     {
         List<T> list = new List<T>();

@@ -23,4 +23,13 @@ namespace DataWizPro.Models
         public DateTime created_at  { get; set; }
         public string status { get; set; }
     }
+
+    public class UserExtended
+    {
+        public string Name { get; set; }
+        public UserRole Role { get; set; }
+        public int Age { get; set; } // New property
+        public UserStatus Status { get; set; } // New property
+                                               // Other properties...
+    }
 }
